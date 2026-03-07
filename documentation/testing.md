@@ -13,29 +13,23 @@ Follow these 5 steps to verify the pipeline works end-to-end.
 
 **Expected:** File appears at `sales-data/raw/sales_data.csv`
 
-Take a screenshot → save as `screenshots/s3_output.png`
+Take a screenshot → save as `screenshots/s3_input.png`
 
 ---
 
-## Step 2 — Send Message to SQS Queue
+## Step 2 — Verify SQS Received the S3 Event Automatically
+
+Because S3 Event Notifications are configured, **no manual message is needed**. Uploading the file in Step 1 automatically sends an event to SQS.
 
 1. Go to **SQS → sales-pipeline-queue**
-2. Click **Send and receive messages**
-3. Paste this into the Message body field:
+2. Click **Send and receive messages** → scroll to **Receive messages** → click **Poll for messages**
+3. You should briefly see 1 message appear, then disappear as Lambda consumes it
 
-```json
-{
-  "file_name": "sales_data.csv",
-  "source_path": "sales-data/raw/",
-  "destination_path": "sales-data/processed/"
-}
-```
+**Expected:** Messages Available briefly shows 1, then returns to 0 automatically
 
-4. Click **Send Message**
+Take a screenshot of the queue → save as `screenshots/sqs_queue.png`
 
-**Expected:** Messages Available briefly shows 1, then drops to 0 as Lambda consumes it
-
-Take a screenshot → save as `screenshots/sqs_queue.png`
+> If no message appears, check that the S3 Event Notification is pointing to the correct queue and that the SQS Access Policy allows `aws:SourceArn` from `arn:aws:s3:::sales-data-bucket-sqs`.
 
 ---
 
@@ -100,7 +94,7 @@ Take a screenshot of the processed folder → save as `screenshots/s3_output.png
 | Step | Service | Pass Condition                                         |
 | ---- | ------- | ------------------------------------------------------ |
 | 1    | S3      | CSV visible in `raw/`                                  |
-| 2    | SQS     | Message sent; queue count returns to 0                 |
+| 2    | SQS     | S3 event auto-delivered; queue count returns to 0      |
 | 3    | Lambda  | CloudWatch logs show Glue JobRunId                     |
 | 4    | Glue    | Job run status: Succeeded                              |
 | 5    | S3      | Parquet files present in `processed/` with new columns |
