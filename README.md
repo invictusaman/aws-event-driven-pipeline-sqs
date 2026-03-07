@@ -26,16 +26,16 @@ aws-event-driven-pipeline/
 ├── README.md
 ├── architecture-diagram.png
 ├── data/
+│   ├── sample_output
+│   │   └── sample.parquet
 │   └── sales_data.csv
 ├── documentation/
 │   ├── architecture.md
 │   ├── setup_steps.md
 │   └── testing.md
 └── screenshots/
-    ├── sqs_queue.png
-    ├── lambda_trigger.png
-    ├── glue_job.png
-    └── s3_output.png
+    ├── setup
+    └── Testing
 ```
 
 ## Sample SQS Message
@@ -83,4 +83,4 @@ See `documentation/testing.md` for verification steps.
 2. Screenshots of AWS resources (`screenshots/`)
 3. Pipeline workflow explanation (`documentation/architecture.md`)
 4. Sample SQS message (see above)
-5. Output data screenshot (`screenshots/s3_output.png`)
+5. Output data screenshot (`screenshots/Testing/s3_output.png`)
